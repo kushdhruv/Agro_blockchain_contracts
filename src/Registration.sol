@@ -51,7 +51,10 @@ contract Registration is Ownable {
         require(participants[_addr].role == _role, "Address doesn't have required role");
         _;
     }
-
+    modifier onlyAuthorized() {
+        require(msg.sender == owner() || participants[msg.sender].role == Role.ADMIN || participants[msg.sender].role == Role.GOVT_AUTHORITY, "Not authorized");
+        _;
+    }
     constructor() Ownable(msg.sender) {
         //the deployer is the initial admin
         participants[msg.sender] = Participant({
@@ -68,13 +71,13 @@ contract Registration is Ownable {
 
     //admin functions
 
-    function addKYCSigner(address _signer) public onlyOwner {
+    function addKYCSigner(address _signer) public onlyAuthorized {
         require(_signer != address(0), "Invalid signer address");
         kycSigners[_signer] = true;
         emit KycSignerAdded(_signer);
     }
 
-    function removeKYCSigner(address _signer) public onlyOwner {
+    function removeKYCSigner(address _signer) public onlyAuthorized {
         require(kycSigners[_signer], "Signer not found");
         kycSigners[_signer] = false;
         emit KycSignerRemoved(_signer);
@@ -175,7 +178,7 @@ contract Registration is Ownable {
     }
         
     // admin functions to suspend/revoke KYC
-    function setKycStatus (address _participant, KYCStatus _status) external onlyOwner onlyActiveParticipant(_participant) {
+    function setKycStatus (address _participant, KYCStatus _status) external onlyAuthorized onlyActiveParticipant(_participant) {
         Participant storage participant = participants[_participant];
         require(participant.role != Role.UNREGISTERED, "Participant not active");
         KYCStatus old = participant.kycStatus;
@@ -184,7 +187,7 @@ contract Registration is Ownable {
         emit KycStatusUpdated(_participant, old, _status, block.timestamp);
     }
 
-    function revokeParticipant(address _participant) external onlyOwner onlyActiveParticipant(_participant) {
+    function revokeParticipant(address _participant) external onlyAuthorized onlyActiveParticipant(_participant) {
         Participant storage participant = participants[_participant];
         require(participant.role != Role.UNREGISTERED, "Participant not active");
         KYCStatus old = participant.kycStatus;
@@ -200,6 +203,16 @@ contract Registration is Ownable {
 
     //view functions
     function getParticipant(address _addr) external view returns (
+        Role role,
+        KYCStatus kyc,
+        uint256 createdAt,
+        uint256 updatedAt,
+        bool active) {
+        Participant memory p = participants[_addr];
+        return (p.role, p.kycStatus, p.createdAt, p.updatedAt, p.active);
+    }
+
+    function getParticipantFull(address _addr) external view onlyAuthorized returns (
         Role role,
         KYCStatus kyc,
         string memory metadataHash,
