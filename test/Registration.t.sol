@@ -35,7 +35,7 @@ contract RegistrationTest is Test {
         reg.registerParticipant(Registration.Role.FARMER, "metaHash");
         assertFalse(reg.isKycVerified(user), "User should not be KYC verified immediately after registration");
         assertTrue(reg.hasRole(user, Registration.Role.FARMER));
-        (Registration.Role role,, , , , bool active) = reg.getParticipant(user);
+        (Registration.Role role, , , , bool active) = reg.getParticipant(user);
         assertEq(uint(role), uint(Registration.Role.FARMER));
         assertTrue(active);
 
