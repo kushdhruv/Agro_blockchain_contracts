@@ -1,6 +1,13 @@
 # Agro Blockchain Contracts
 
-This directory contains all smart contracts for the AgriChain supply chain platform, built with Solidity 0.8.20 and the Foundry framework.
+[![Solidity](https://img.shields.io/badge/Solidity-0.8.20-363636?style=flat-square&logo=solidity)](https://soliditylang.org/)
+[![Foundry](https://img.shields.io/badge/Framework-Foundry-red?style=flat-square)](https://book.getfoundry.sh/)
+[![ERC-721](https://img.shields.io/badge/Token-ERC--721-blue?style=flat-square)](https://eips.ethereum.org/EIPS/eip-721)
+[![ERC-20](https://img.shields.io/badge/Token-ERC--20-gold?style=flat-square)](https://eips.ethereum.org/EIPS/eip-20)
+[![Frontend App](https://img.shields.io/badge/Frontend-studio--AgroChainV2-green?style=flat-square)](https://github.com/kushdhruv/studio-AgroChainV2)
+
+Smart contracts for the [AgroChain](https://github.com/kushdhruv/studio-AgroChainV2) agricultural supply chain platform — KYC registry, oracle manager, ERC-721 shipment tokens, ERC-20 escrow, and dispute resolution. Tested with Foundry.
+
 
 ## 📁 Directory Structure
 
